@@ -1,0 +1,22 @@
+Task 5 – Mini Project: Student Performance Prediction
+
+Dataset used:
+A synthetic Student Performance dataset containing 120 student records was created for this educational mini project. It contains both PASS and FAIL examples so that a classification model can learn two classes.
+
+Features selected:
+The model uses Study Hours, Attendance, Previous Marks, Assignment Score, and Project Requirements. Project Requirements is a categorical feature with the values “Met” and “Not Met”. The target variable is Result (PASS/FAIL).
+
+Model used:
+Logistic Regression was selected because this is a binary classification problem. The data was divided into 80% training data and 20% testing data using a fixed random state of 42. Numerical features were standardized and the categorical Project Requirements feature was converted to a numeric indicator.
+
+Results obtained:
+The trained model was evaluated on the unseen test set. The model achieved an accuracy of 83.33%. Three new student records were then supplied to the model. The predictions are displayed in the notebook and in the prediction-results CSV file.
+
+Accuracy:
+Test accuracy = 83.33%.
+
+Limitations:
+The dataset is synthetic and relatively small, so the accuracy should not be treated as evidence of real-world performance. Student outcomes can also depend on factors not included in the dataset, such as health, teaching quality, exam difficulty, and motivation.
+
+Future improvements:
+A larger real-world dataset could be collected, additional meaningful features could be added, class imbalance could be checked, and several classification algorithms could be compared using cross-validation. A web interface could also be developed so teachers or students can enter values and receive a prediction.
