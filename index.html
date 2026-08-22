@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Student Performance Prediction</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #eef2ff, #f8fafc);
+            color: #1e293b;
+            padding: 30px 15px;
+        }
+
+        .container {
+            max-width: 850px;
+            margin: auto;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .header h1 {
+            font-size: 34px;
+            color: #1e3a8a;
+            margin-bottom: 8px;
+        }
+
+        .header p {
+            color: #64748b;
+            font-size: 16px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 18px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(15, 23, 42, 0.10);
+            border: 1px solid #e2e8f0;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .full {
+            grid-column: 1 / -1;
+        }
+
+        label {
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #334155;
+        }
+
+        input,
+        select {
+            width: 100%;
+            padding: 13px 14px;
+            border: 1px solid #cbd5e1;
+            border-radius: 10px;
+            font-size: 15px;
+            outline: none;
+            background: white;
+        }
+
+        input:focus,
+        select:focus {
+            border-color: #2563eb;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+        }
+
+        .hint {
+            margin-top: 5px;
+            font-size: 12px;
+            color: #94a3b8;
+        }
+
+        button {
+            width: 100%;
+            margin-top: 25px;
+            padding: 14px;
+            border: none;
+            border-radius: 10px;
+            background: #2563eb;
+            color: white;
+            font-size: 17px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        button:hover {
+            background: #1d4ed8;
+        }
+
+        button:disabled {
+            background: #94a3b8;
+            cursor: not-allowed;
+        }
+
+        .result {
+            display: none;
+            margin-top: 25px;
+            padding: 25px;
+            border-radius: 15px;
+            text-align: center;
+        }
+
+        .result.pass {
+            display: block;
+            background: #ecfdf5;
+            border: 1px solid #86efac;
+        }
+
+        .result.fail {
+            display: block;
+            background: #fef2f2;
+            border: 1px solid #fca5a5;
+        }
+
+        .result h2 {
+            font-size: 30px;
+            margin-bottom: 10px;
+        }
+
+        .pass h2 {
+            color: #15803d;
+        }
+
+        .fail h2 {
+            color: #dc2626;
+        }
+
+        .confidence {
+            font-size: 18px;
+            font-weight: 600;
+            color: #334155;
+        }
+
+        .error {
+            display: none;
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 10px;
+            background: #fff1f2;
+            border: 1px solid #fecdd3;
+            color: #be123c;
+            text-align: center;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 20px;
+            color: #64748b;
+            font-size: 13px;
+        }
+
+        @media (max-width: 650px) {
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .full {
+                grid-column: auto;
+            }
+
+            .header h1 {
+                font-size: 27px;
+            }
+
+            .card {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <div class="header">
+        <h1>🎓 Student Performance Prediction</h1>
+        <p>Machine Learning based PASS / FAIL prediction</p>
+    </div>
+
+    <div class="card">
+
+        <form id="predictionForm">
+
+            <div class="form-grid">
+
+                <div class="form-group">
+                    <label for="study_hours">Study Hours</label>
+                    <input
+                        type="number"
+                        id="study_hours"
+                        step="0.1"
+                        min="0"
+                        max="24"
+                        placeholder="Example: 6"
+                        required
+                    >
+                    <span class="hint">Average hours spent studying</span>
+                </div>
+
+                <div class="form-group">
+                    <label for="attendance">Attendance (%)</label>
+                    <input
+                        type="number"
+                        id="attendance"
+                        step="0.1"
+                        min="0"
+                        max="100"
+                        placeholder="Example: 85"
+                        required
+                    >
+                    <span class="hint">Attendance percentage</span>
+                </div>
+
+                <div class="form-group">
+                    <label for="previous_marks">Previous Marks</label>
+                    <input
+                        type="number"
+                        id="previous_marks"
+                        step="0.1"
+                        min="0"
+                        max="100"
+                        placeholder="Example: 72"
+                        required
+                    >
+                    <span class="hint">Previous examination marks</span>
+                </div>
+
+                <div class="form-group">
+                    <label for="assignment_score">Assignment Score</label>
+                    <input
+                        type="number"
+                        id="assignment_score"
+                        step="0.1"
+                        min="0"
+                        max="100"
+                        placeholder="Example: 82"
+                        required
+                    >
+                    <span class="hint">Assignment performance score</span>
+                </div>
+
+                <div class="form-group full">
+                    <label for="project_requirements">
+                        Project Requirements
+                    </label>
+
+                    <select id="project_requirements" required>
+                        <option value="Met">Met</option>
+                        <option value="Not Met">Not Met</option>
+                    </select>
+                </div>
+
+            </div>
+
+            <button type="submit" id="predictButton">
+                Predict Student Performance
+            </button>
+
+        </form>
+
+        <div id="errorMessage" class="error"></div>
+
+        <div id="resultBox" class="result">
+            <h2 id="predictionText"></h2>
+            <p class="confidence">
+                Confidence: <span id="confidenceText"></span>
+            </p>
+        </div>
+
+    </div>
+
+    <div class="footer">
+        Logistic Regression • Scikit-learn • Student Performance ML Project
+    </div>
+
+</div>
+
+<script>
+
+    const form = document.getElementById("predictionForm");
+    const button = document.getElementById("predictButton");
+
+    const resultBox = document.getElementById("resultBox");
+    const predictionText = document.getElementById("predictionText");
+    const confidenceText = document.getElementById("confidenceText");
+
+    const errorMessage = document.getElementById("errorMessage");
+
+    form.addEventListener("submit", async function(event) {
+
+        event.preventDefault();
+
+        resultBox.style.display = "none";
+        errorMessage.style.display = "none";
+
+        button.disabled = true;
+        button.textContent = "Predicting...";
+
+        const data = {
+            Study_Hours: Number(
+                document.getElementById("study_hours").value
+            ),
+
+            Attendance: Number(
+                document.getElementById("attendance").value
+            ),
+
+            Previous_Marks: Number(
+                document.getElementById("previous_marks").value
+            ),
+
+            Assignment_Score: Number(
+                document.getElementById("assignment_score").value
+            ),
+
+            Project_Requirements:
+                document.getElementById("project_requirements").value
+        };
+
+        try {
+
+            const response = await fetch("/api/predict", {
+                method: "POST",
+
+                headers: {
+                    "Content-Type": "application/json"
+                },
+
+                body: JSON.stringify(data)
+            });
+
+            const result = await response.json();
+
+            if (!response.ok) {
+                throw new Error(
+                    result.error || "Prediction failed."
+                );
+            }
+
+            predictionText.textContent =
+                result.prediction;
+
+            confidenceText.textContent =
+                result.confidence + "%";
+
+            resultBox.className =
+                "result " +
+                (result.prediction === "PASS" ? "pass" : "fail");
+
+            resultBox.style.display = "block";
+
+        } catch (error) {
+
+            errorMessage.textContent =
+                error.message ||
+                "Something went wrong. Please try again.";
+
+            errorMessage.style.display = "block";
+
+        } finally {
+
+            button.disabled = false;
+            button.textContent =
+                "Predict Student Performance";
+        }
+
+    });
+
+</script>
+
+</body>
+</html>
