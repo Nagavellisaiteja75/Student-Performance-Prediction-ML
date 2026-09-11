@@ -1,4 +1,4 @@
-Task 5 – Mini Project: Student Performance Prediction
+Mini Project: Student Performance Prediction
 
 Dataset used:
 A synthetic Student Performance dataset containing 120 student records was created for this educational mini project. It contains both PASS and FAIL examples so that a classification model can learn two classes.
