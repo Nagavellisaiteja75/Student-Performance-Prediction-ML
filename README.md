@@ -1,6 +1,6 @@
 # 🎓 Student Performance Prediction
 
-> **Machine Learning Mini Project — Task 5**
+> **Machine Learning Mini Project**
 
 A simple machine learning classification project that predicts whether a student is likely to **PASS or FAIL** based on academic and engagement-related features such as study hours, attendance, previous marks, assignment performance, and project requirements.
 
